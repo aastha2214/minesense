@@ -1,0 +1,106 @@
+{
+  "source_csv_sha256": "21f46156630c5efa63d3db9334f05870ce6f15358acfd71fd9062f504a4f30fc",
+  "quality": {
+    "rows": 338,
+    "columns": [
+      "V",
+      "H",
+      "S",
+      "M"
+    ],
+    "missing_values": {
+      "V": 0,
+      "H": 0,
+      "S": 0,
+      "M": 0
+    },
+    "exact_duplicate_rows": 0,
+    "duplicate_feature_rows": 0,
+    "feature_vectors_with_conflicting_labels": 0,
+    "duplicate_rows_after_rounding_V_to_4dp": 0,
+    "class_counts": {
+      "No mine": 71,
+      "Anti-tank": 70,
+      "Anti-personnel": 66,
+      "Booby-trapped AP": 66,
+      "M14 AP": 65
+    },
+    "soil_counts": {
+      "1": 59,
+      "2": 51,
+      "3": 56,
+      "4": 57,
+      "5": 58,
+      "6": 57
+    },
+    "V_min": 0.197733879,
+    "V_max": 0.999998728,
+    "V_unique_values": 196,
+    "rows_sharing_V_with_another_row": 205,
+    "H_unique_values": [
+      0.0,
+      0.090909091,
+      0.181818182,
+      0.272727273,
+      0.363636364,
+      0.454545455,
+      0.545454545,
+      0.636363636,
+      0.727272727,
+      0.818181818,
+      0.909090909,
+      1.0
+    ],
+    "H_values_times_11": [
+      0.0,
+      1.0,
+      2.0,
+      3.0,
+      4.0,
+      5.0,
+      6.0,
+      7.0,
+      8.0,
+      9.0,
+      10.0,
+      11.0
+    ]
+  },
+  "kaggle_vs_uci": {
+    "checked": true,
+    "uci_rows": 338,
+    "same_shape": true,
+    "max_abs_difference_same_row_order": 4.956889898544148e-10,
+    "identical_within_1e-8": true
+  },
+  "design": {
+    "soil_levels": 6,
+    "height_levels": 12,
+    "class_levels": 5,
+    "cells_in_full_grid": 360,
+    "cells_observed": 338,
+    "cells_missing": 22,
+    "max_rows_in_one_cell": 1
+  },
+  "splits": {
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "folds_per_seed": 5,
+    "total_splits": 25,
+    "shared_row_indices_between_parts": 0,
+    "shared_feature_vectors_between_parts": 0,
+    "each_row_tested_exactly_once_per_seed": true,
+    "test_fold_size_range": [
+      67,
+      68
+    ],
+    "train_size_first_split": 229,
+    "val_size_first_split": 41,
+    "smallest_class_count_in_any_test_fold": 13
+  }
+}

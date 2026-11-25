@@ -1,0 +1,31 @@
+class,soil,n,spearman_rho,p_value,V_at_lowest_H,V_at_highest_H
+No mine,Dry sandy,12,-0.9352,0.0,0.3382,0.2349
+No mine,Dry humus,12,-0.7391,0.006,0.3153,0.2659
+No mine,Dry limy,12,-0.4105,0.185,0.3474,0.3082
+No mine,Humid sandy,12,-0.9366,0.0,0.3535,0.2356
+No mine,Humid humus,12,-0.3958,0.2028,0.3231,0.2742
+No mine,Humid limy,11,-0.1818,0.5926,0.3384,0.287
+Anti-tank,Dry sandy,12,-0.9824,0.0,1.0,0.4392
+Anti-tank,Dry humus,10,-0.9879,0.0,0.719,0.3625
+Anti-tank,Dry limy,12,-0.889,0.0001,1.0,0.5498
+Anti-tank,Humid sandy,12,-0.993,0.0,1.0,0.4502
+Anti-tank,Humid humus,12,-0.9632,0.0,1.0,0.4673
+Anti-tank,Humid limy,12,-0.9544,0.0,1.0,0.4441
+Anti-personnel,Dry sandy,12,-0.9301,0.0,0.3893,0.3033
+Anti-personnel,Dry humus,11,-0.9498,0.0,0.5347,0.2538
+Anti-personnel,Dry limy,10,-0.9758,0.0,0.6647,0.353
+Anti-personnel,Humid sandy,10,-0.9758,0.0,0.6133,0.3444
+Anti-personnel,Humid humus,12,-0.8881,0.0001,0.574,0.3263
+Anti-personnel,Humid limy,11,-0.9909,0.0,0.7523,0.3065
+Booby-trapped AP,Dry sandy,11,-0.7455,0.0085,0.5136,0.3595
+Booby-trapped AP,Dry humus,11,-0.9545,0.0,0.5136,0.3293
+Booby-trapped AP,Dry limy,11,-0.6,0.051,0.2638,0.2349
+Booby-trapped AP,Humid sandy,11,-0.9909,0.0,0.5015,0.3095
+Booby-trapped AP,Humid humus,10,-0.9758,0.0,0.2813,0.1977
+Booby-trapped AP,Humid limy,12,-0.8932,0.0001,0.5921,0.3293
+M14 AP,Dry sandy,12,-0.2587,0.4168,0.5831,0.3142
+M14 AP,Dry humus,7,-0.8469,0.0162,0.423,0.3323
+M14 AP,Dry limy,11,-0.9977,0.0,0.5196,0.2961
+M14 AP,Humid sandy,12,-0.972,0.0,0.5589,0.3656
+M14 AP,Humid humus,12,-0.972,0.0,0.4463,0.2953
+M14 AP,Humid limy,11,-0.8273,0.0017,0.4955,0.3142

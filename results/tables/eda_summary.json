@@ -1,0 +1,90 @@
+{
+  "height_law": {
+    "series": 30,
+    "series_with_negative_rho": 30,
+    "series_with_rho_below_minus_0.8": 23,
+    "median_spearman_rho_by_class": {
+      "No mine": -0.575,
+      "Anti-tank": -0.973,
+      "Anti-personnel": -0.963,
+      "Booby-trapped AP": -0.924,
+      "M14 AP": -0.909
+    },
+    "saturation_threshold": 0.999,
+    "saturated_rows": 18,
+    "saturated_rows_by_class": {
+      "Anti-tank": 18
+    },
+    "fits": {
+      "all_rows": {
+        "rows": 338,
+        "series": 30,
+        "R2_linear_in_H": 0.8760984763085782,
+        "R2_inverse_cube_shared_offset": 0.8764997746098483,
+        "best_shared_offset_d0": 20.0,
+        "offset_at_search_limit": true,
+        "offset_search_range": [
+          0.05,
+          20.0
+        ]
+      },
+      "unsaturated_rows": {
+        "rows": 320,
+        "series": 30,
+        "R2_linear_in_H": 0.8592471484681823,
+        "R2_inverse_cube_shared_offset": 0.8955306314403959,
+        "best_shared_offset_d0": 1.678765941056349,
+        "offset_at_search_limit": false,
+        "offset_search_range": [
+          0.05,
+          20.0
+        ]
+      },
+      "unsaturated_mine_rows": {
+        "rows": 249,
+        "series": 24,
+        "R2_linear_in_H": 0.8632704868716191,
+        "R2_inverse_cube_shared_offset": 0.9007761647047199,
+        "best_shared_offset_d0": 1.653745578341598,
+        "offset_at_search_limit": false,
+        "offset_search_range": [
+          0.05,
+          20.0
+        ]
+      }
+    }
+  },
+  "V_variance_explained_R2": {
+    "H": 0.14252392563184935,
+    "S": 0.02170669269427916,
+    "M": 0.6103232628126711,
+    "H+S": 0.16804532004621198,
+    "M+H": 0.7382876228205393,
+    "M+H+S": 0.7603554014303711
+  },
+  "tests": {
+    "kruskal_V_across_classes": {
+      "H": 188.49437711055563,
+      "p": 1.1163959205714455e-39
+    },
+    "mannwhitney_V_pairwise_bonferroni_p": {
+      "No mine vs Anti-tank": 1.161091138966044e-23,
+      "No mine vs Anti-personnel": 5.6234465934541735e-15,
+      "No mine vs Booby-trapped AP": 0.007784034078630806,
+      "No mine vs M14 AP": 3.1019766724490547e-12,
+      "Anti-tank vs Anti-personnel": 5.865314137483213e-16,
+      "Anti-tank vs Booby-trapped AP": 3.150872762931147e-19,
+      "Anti-tank vs M14 AP": 6.4246979086232666e-18,
+      "Anti-personnel vs Booby-trapped AP": 0.023098729457940132,
+      "Anti-personnel vs M14 AP": 1.0,
+      "Booby-trapped AP vs M14 AP": 0.34590476086657784
+    },
+    "kruskal_V_across_soils_within_class_p": {
+      "No mine": 0.0004886939515912981,
+      "Anti-tank": 0.0045591834788993825,
+      "Anti-personnel": 0.03370691258695444,
+      "Booby-trapped AP": 4.0328702740845947e-08,
+      "M14 AP": 0.0014857157578210417
+    }
+  }
+}
