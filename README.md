@@ -132,6 +132,10 @@ data/            downloaded data (not committed; see data/README.md)
 
 Dataset: C. Yilmaz, H. T. Kahraman and S. Söyler, *Land Mines*, UCI Machine Learning Repository, doi:[10.24432/C54C8Z](https://doi.org/10.24432/C54C8Z), CC BY 4.0. Original study: C. Yilmaz, H. T. Kahraman and S. Söyler, "Passive Mine Detection and Classification Method Based on Hybrid Model," *IEEE Access*, vol. 6, pp. 47870-47888, 2018, doi:[10.1109/ACCESS.2018.2866538](https://doi.org/10.1109/ACCESS.2018.2866538).
 
+## Licence
+
+The code is released under the [MIT licence](LICENSE). The dataset is not part of this repository and keeps its own licence (see above).
+
 ## Authors
 
 _To be added._
