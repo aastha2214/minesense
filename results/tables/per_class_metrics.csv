@@ -1,0 +1,51 @@
+model,class,precision,precision_std,recall,recall_std
+MLP,No mine,0.9056,0.0874,0.6701,0.1475
+MLP,Anti-tank,0.9208,0.0704,0.9314,0.0837
+MLP,Anti-personnel,0.4887,0.1192,0.5365,0.1813
+MLP,Booby-trapped AP,0.5898,0.1197,0.6253,0.1269
+MLP,M14 AP,0.4380,0.1403,0.4554,0.1646
+MLP + physics features,No mine,0.8542,0.0902,0.7293,0.1216
+MLP + physics features,Anti-tank,0.9292,0.0719,0.9171,0.0938
+MLP + physics features,Anti-personnel,0.5325,0.1197,0.5613,0.1709
+MLP + physics features,Booby-trapped AP,0.6100,0.1247,0.6310,0.1389
+MLP + physics features,M14 AP,0.4687,0.1401,0.4738,0.1715
+PI-MLP (physics features + loss),No mine,0.8675,0.0904,0.7347,0.1170
+PI-MLP (physics features + loss),Anti-tank,0.9315,0.0705,0.9429,0.0772
+PI-MLP (physics features + loss),Anti-personnel,0.5369,0.1214,0.5549,0.1779
+PI-MLP (physics features + loss),Booby-trapped AP,0.6245,0.1221,0.6708,0.1508
+PI-MLP (physics features + loss),M14 AP,0.4754,0.1698,0.4554,0.1789
+FT-Transformer,No mine,0.8450,0.0898,0.8137,0.0997
+FT-Transformer,Anti-tank,0.9160,0.0780,0.9314,0.0728
+FT-Transformer,Anti-personnel,0.5744,0.1147,0.5310,0.1669
+FT-Transformer,Booby-trapped AP,0.6203,0.1450,0.6521,0.1997
+FT-Transformer,M14 AP,0.5230,0.0855,0.5077,0.1175
+FT-Transformer + physics features,No mine,0.8561,0.0950,0.7550,0.1241
+FT-Transformer + physics features,Anti-tank,0.9406,0.0614,0.9400,0.0734
+FT-Transformer + physics features,Anti-personnel,0.5758,0.1415,0.5336,0.1550
+FT-Transformer + physics features,Booby-trapped AP,0.6527,0.1064,0.6813,0.1539
+FT-Transformer + physics features,M14 AP,0.4862,0.1369,0.5231,0.1818
+PI-FT-Transformer (physics features + loss),No mine,0.8526,0.0971,0.7909,0.1235
+PI-FT-Transformer (physics features + loss),Anti-tank,0.9479,0.0640,0.9400,0.0734
+PI-FT-Transformer (physics features + loss),Anti-personnel,0.5853,0.0866,0.6097,0.1564
+PI-FT-Transformer (physics features + loss),Booby-trapped AP,0.6312,0.1070,0.6734,0.1423
+PI-FT-Transformer (physics features + loss),M14 AP,0.5187,0.1230,0.4769,0.1748
+k-NN,No mine,0.5119,0.0854,0.5830,0.1600
+k-NN,Anti-tank,0.8729,0.0736,0.8514,0.0965
+k-NN,Anti-personnel,0.2586,0.0884,0.3178,0.1282
+k-NN,Booby-trapped AP,0.3132,0.1110,0.2602,0.0865
+k-NN,M14 AP,0.2890,0.2865,0.1385,0.0916
+SVM (RBF),No mine,0.8099,0.0730,0.8870,0.0984
+SVM (RBF),Anti-tank,0.9342,0.0797,0.9714,0.0412
+SVM (RBF),Anti-personnel,0.5834,0.1385,0.5492,0.1379
+SVM (RBF),Booby-trapped AP,0.7014,0.1305,0.6969,0.1245
+SVM (RBF),M14 AP,0.5347,0.1289,0.4585,0.1285
+Random forest,No mine,0.7580,0.0901,0.8248,0.1152
+Random forest,Anti-tank,0.8690,0.0811,0.8971,0.0852
+Random forest,Anti-personnel,0.4118,0.1211,0.4068,0.1077
+Random forest,Booby-trapped AP,0.5160,0.1526,0.4699,0.1232
+Random forest,M14 AP,0.3580,0.1073,0.3169,0.1161
+XGBoost,No mine,0.7133,0.0970,0.7756,0.1373
+XGBoost,Anti-tank,0.8527,0.0842,0.8743,0.1016
+XGBoost,Anti-personnel,0.3185,0.1150,0.2974,0.1170
+XGBoost,Booby-trapped AP,0.4804,0.0970,0.4407,0.1270
+XGBoost,M14 AP,0.2716,0.1087,0.2646,0.1134

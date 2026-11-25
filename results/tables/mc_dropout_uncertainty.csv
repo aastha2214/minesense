@@ -1,0 +1,13 @@
+model,flag_policy,accuracy_all,flagged_share,accuracy_confident,accuracy_flagged,mine_missed_all,mine_missed_unflagged,aurc,median_mutual_info
+MLP,MC dropout (50 passes),0.6385,0.2006,0.7091,0.3569,0.0187,0.0127,0.1625,0.0606
+MLP,softmax entropy (1 pass),0.6479,0.1911,0.7140,0.3684,0.0210,0.0150,0.1553,
+MLP + physics features,MC dropout (50 passes),0.6592,0.2201,0.7208,0.4409,0.0360,0.0210,0.1508,0.0483
+MLP + physics features,softmax entropy (1 pass),0.6669,0.2178,0.7315,0.4348,0.0360,0.0210,0.1430,
+PI-MLP (physics features + loss),MC dropout (50 passes),0.6728,0.2030,0.7335,0.4344,0.0352,0.0225,0.1400,0.0224
+PI-MLP (physics features + loss),softmax entropy (1 pass),0.6763,0.2065,0.7390,0.4355,0.0330,0.0210,0.1376,
+FT-Transformer,MC dropout (50 passes),0.6864,0.1947,0.7509,0.4195,0.0419,0.0345,0.1335,0.0494
+FT-Transformer,softmax entropy (1 pass),0.6923,0.2024,0.7626,0.4152,0.0419,0.0367,0.1329,
+FT-Transformer + physics features,MC dropout (50 passes),0.6905,0.1917,0.7533,0.4259,0.0367,0.0285,0.1291,0.0284
+FT-Transformer + physics features,softmax entropy (1 pass),0.6911,0.1953,0.7610,0.4030,0.0360,0.0285,0.1263,
+PI-FT-Transformer (physics features + loss),MC dropout (50 passes),0.7047,0.1947,0.7766,0.4073,0.0375,0.0285,0.1145,0.0217
+PI-FT-Transformer (physics features + loss),softmax entropy (1 pass),0.7030,0.1947,0.7722,0.4164,0.0404,0.0315,0.1142,

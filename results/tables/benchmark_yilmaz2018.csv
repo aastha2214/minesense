@@ -1,0 +1,14 @@
+source,model,protocol,classification_accuracy,detection_accuracy
+Yilmaz et al. 2018,"Meta-heuristic k-NN (fuzzy metric, k=4)","one random split, 113 test samples; feature weights optimised with a fitness computed on 'test observations' (p. 47877)","85.8% (16 of 113 wrong, p. 47884)","98.2% (2 of 113 wrong, p. 47883)"
+Yilmaz et al. 2018,"ANN, inputs V, H, S",same split,71.3% (p. 47881),not stated in the text
+Yilmaz et al. 2018,Starting point the paper improves on,as stated: 'This rate has reached up to 85.8% from 57.7%',57.7% (p. 47871),-
+This work,SVM (RBF),"nested CV, stratified 5-fold x 5 seeds (25 test folds of 67-68)",71.9 ± 5.7% (single folds 61.2-80.6%),93.1 ± 2.9%
+This work,PI-FT-Transformer (physics features + loss),"nested CV, stratified 5-fold x 5 seeds (25 test folds of 67-68)",70.3 ± 5.2% (single folds 58.8-83.8%),92.4 ± 2.9%
+This work,FT-Transformer,"nested CV, stratified 5-fold x 5 seeds (25 test folds of 67-68)",69.2 ± 4.9% (single folds 61.8-77.6%),92.8 ± 3.1%
+This work,FT-Transformer + physics features,"nested CV, stratified 5-fold x 5 seeds (25 test folds of 67-68)",69.1 ± 5.9% (single folds 58.8-79.4%),92.0 ± 3.3%
+This work,PI-MLP (physics features + loss),"nested CV, stratified 5-fold x 5 seeds (25 test folds of 67-68)",67.6 ± 6.2% (single folds 55.9-85.3%),91.8 ± 2.8%
+This work,MLP + physics features,"nested CV, stratified 5-fold x 5 seeds (25 test folds of 67-68)",66.7 ± 5.6% (single folds 58.8-79.4%),91.5 ± 2.9%
+This work,MLP,"nested CV, stratified 5-fold x 5 seeds (25 test folds of 67-68)",64.8 ± 5.5% (single folds 55.9-76.1%),91.4 ± 3.2%
+This work,Random forest,"nested CV, stratified 5-fold x 5 seeds (25 test folds of 67-68)",59.1 ± 4.8% (single folds 52.2-70.6%),90.6 ± 3.5%
+This work,XGBoost,"nested CV, stratified 5-fold x 5 seeds (25 test folds of 67-68)",53.9 ± 5.4% (single folds 47.1-64.2%),88.6 ± 4.2%
+This work,k-NN,"nested CV, stratified 5-fold x 5 seeds (25 test folds of 67-68)",43.8 ± 5.5% (single folds 36.8-55.2%),78.8 ± 3.4%

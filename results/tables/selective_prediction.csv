@@ -1,0 +1,17 @@
+model,score,aurc_mean,aurc_std,acc_at_50_mean,acc_at_50_std,acc_at_80_mean,acc_at_80_std
+FT-Transformer,MC-dropout entropy,0.1310,0.0404,0.8847,0.0652,0.7548,0.0629
+FT-Transformer,max softmax,0.1325,0.0383,0.8788,0.0659,0.7533,0.0580
+FT-Transformer + physics features,MC-dropout entropy,0.1266,0.0416,0.8882,0.0769,0.7570,0.0653
+FT-Transformer + physics features,max softmax,0.1261,0.0449,0.8918,0.0645,0.7593,0.0600
+k-NN,max probability,0.4384,0.1281,0.5588,0.1380,0.4741,0.0676
+MLP,MC-dropout entropy,0.1658,0.0503,0.8212,0.0773,0.7015,0.0617
+MLP,max softmax,0.1545,0.0444,0.8353,0.0801,0.7178,0.0525
+MLP + physics features,MC-dropout entropy,0.1527,0.0462,0.8388,0.0769,0.7148,0.0659
+MLP + physics features,max softmax,0.1387,0.0389,0.8741,0.0609,0.7289,0.0602
+PI-FT-Transformer (physics features + loss),MC-dropout entropy,0.1161,0.0336,0.9047,0.0532,0.7741,0.0612
+PI-FT-Transformer (physics features + loss),max softmax,0.1163,0.0329,0.9071,0.0555,0.7741,0.0590
+PI-MLP (physics features + loss),MC-dropout entropy,0.1411,0.0511,0.8588,0.0828,0.7378,0.0807
+PI-MLP (physics features + loss),max softmax,0.1366,0.0445,0.8706,0.0750,0.7400,0.0738
+Random forest,max probability,0.2195,0.0510,0.7529,0.0792,0.6496,0.0590
+SVM (RBF),max probability,0.1661,0.0492,0.8435,0.0478,0.7489,0.0548
+XGBoost,max probability,0.2510,0.0585,0.7424,0.0779,0.6015,0.0581

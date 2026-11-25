@@ -1,0 +1,31 @@
+model,class,feature,mean_abs_shap
+PI-FT-Transformer (physics features + loss),No mine,V (voltage),0.2138
+PI-FT-Transformer (physics features + loss),No mine,H (height),0.0858
+PI-FT-Transformer (physics features + loss),No mine,S (soil),0.0887
+PI-FT-Transformer (physics features + loss),Anti-tank,V (voltage),0.2886
+PI-FT-Transformer (physics features + loss),Anti-tank,H (height),0.1148
+PI-FT-Transformer (physics features + loss),Anti-tank,S (soil),0.0361
+PI-FT-Transformer (physics features + loss),Anti-personnel,V (voltage),0.1142
+PI-FT-Transformer (physics features + loss),Anti-personnel,H (height),0.0649
+PI-FT-Transformer (physics features + loss),Anti-personnel,S (soil),0.0747
+PI-FT-Transformer (physics features + loss),Booby-trapped AP,V (voltage),0.1241
+PI-FT-Transformer (physics features + loss),Booby-trapped AP,H (height),0.0460
+PI-FT-Transformer (physics features + loss),Booby-trapped AP,S (soil),0.0840
+PI-FT-Transformer (physics features + loss),M14 AP,V (voltage),0.1330
+PI-FT-Transformer (physics features + loss),M14 AP,H (height),0.0619
+PI-FT-Transformer (physics features + loss),M14 AP,S (soil),0.0782
+SVM (RBF),No mine,V (voltage),0.2183
+SVM (RBF),No mine,H (height),0.0717
+SVM (RBF),No mine,S (soil),0.0600
+SVM (RBF),Anti-tank,V (voltage),0.2180
+SVM (RBF),Anti-tank,H (height),0.0729
+SVM (RBF),Anti-tank,S (soil),0.0376
+SVM (RBF),Anti-personnel,V (voltage),0.1010
+SVM (RBF),Anti-personnel,H (height),0.0580
+SVM (RBF),Anti-personnel,S (soil),0.0640
+SVM (RBF),Booby-trapped AP,V (voltage),0.0836
+SVM (RBF),Booby-trapped AP,H (height),0.0407
+SVM (RBF),Booby-trapped AP,S (soil),0.0822
+SVM (RBF),M14 AP,V (voltage),0.0910
+SVM (RBF),M14 AP,H (height),0.0449
+SVM (RBF),M14 AP,S (soil),0.0636

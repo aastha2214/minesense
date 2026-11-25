@@ -1,0 +1,11 @@
+model,median_temperature,ece_raw,nll_raw,brier_raw,ece_temp_scaled,nll_temp_scaled,brier_temp_scaled,ece_mc_dropout,nll_mc_dropout,brier_mc_dropout
+MLP,0.6593,0.0541,0.7722,0.4358,0.0751,0.7906,0.4466,0.0468,0.8017,0.4470
+MLP + physics features,0.7195,0.0472,0.7481,0.4195,0.0554,0.7687,0.4270,0.0702,0.7737,0.4302
+PI-MLP (physics features + loss),0.6934,0.0639,0.7355,0.4138,0.0712,0.7645,0.4266,0.0652,0.7488,0.4185
+FT-Transformer,0.9343,0.0548,0.7439,0.4103,0.0649,0.7563,0.4141,0.0490,0.7423,0.4082
+FT-Transformer + physics features,0.9634,0.0846,0.7371,0.4092,0.0847,0.7551,0.4098,0.0602,0.7206,0.4035
+PI-FT-Transformer (physics features + loss),0.8961,0.0602,0.6940,0.3865,0.0677,0.7138,0.3919,0.0501,0.6891,0.3834
+k-NN,,0.3976,13.1071,0.9824,,,,,,
+SVM (RBF),,0.0779,0.8054,0.4359,,,,,,
+Random forest,,0.0696,1.0644,0.5251,,,,,,
+XGBoost,,0.1944,1.2712,0.6221,,,,,,
