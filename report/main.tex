@@ -1,0 +1,300 @@
+\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+\usepackage[T1]{fontenc}
+\usepackage{newtxtext,newtxmath}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage{cite}
+\usepackage[hidelinks]{hyperref}
+\graphicspath{{../results/figures/}}
+\input{generated/numbers.tex}
+\newcommand{\pift}{PI-FT-Transformer}
+
+\begin{document}
+
+\title{MineSense: Physics-Informed Deep Learning for Passive Landmine Detection and Classification with Calibrated Uncertainty}
+
+\author{\IEEEauthorblockN{[Author names to be added]}
+\IEEEauthorblockA{[Affiliation and contact details to be added]}}
+
+\maketitle
+
+\begin{abstract}
+We classify readings of a passive magnetic-anomaly landmine detector into five classes (no mine and four mine types) from the sensor voltage, the sensor height and the soil type, using the public UCI \emph{Land Mines} dataset of \vRows{} readings. We propose a physics-informed FT-Transformer (\pift) whose inputs include features derived from the inverse-cube decay of a dipole field, trained with a physics-consistency loss, a cost-sensitive loss that penalises missed mines, and input-noise augmentation. Six neural variants and four classical baselines are compared under nested cross-validation (stratified 5-fold, 5 repetitions, Optuna tuning inside every training fold). The \pift{} reaches \vAccPiFt{} $\pm$ \vAccsdPiFt{} accuracy and \vDetPiFt\,\% mine/no-mine detection accuracy, statistically tied with a tuned RBF support vector machine (\vAccSvm{} $\pm$ \vAccsdSvm{}; corrected repeated-CV $t$-test $p$~\vPtPiFtVsSvmAccuracy) and significantly better than random forest, XGBoost and $k$-NN. Its advantages are in safety-relevant behaviour: when the half of the readings it is least sure about is referred to a human, its accuracy on the rest is \vSelPiFtMcFifty\,\% against \vSelSvmMpFifty\,\% for the SVM, and under strong sensor noise it misses fewer mines (\vNoisePiFtHalfMiss\,\% against \vNoiseSvmHalfMiss\,\%). A one-pass entropy flag marks \vUncPiFtSmFlaggedShare\,\% of readings as ``uncertain -- inspect manually'', leaving \vUncPiFtSmMineMissedUnflagged\,\% of mines missed without a flag. Physics-based features and loss give small, non-significant gains, and no model transfers to an unseen soil type (at most \vLosoMax\,\% accuracy). The INT8 ONNX model is \vEdgeKbIntEight{}~KB and classifies a reading in about \vLatOnnxIntEight~\textmu s on one laptop CPU thread.
+\end{abstract}
+
+\begin{IEEEkeywords}
+landmine detection, physics-informed deep learning, FT-Transformer, uncertainty, calibration, nested cross-validation
+\end{IEEEkeywords}
+
+\section{Introduction}
+Buried landmines remain a humanitarian hazard long after conflicts end. Passive magnetic detectors measure the distortion that a ferromagnetic object causes in the Earth's field; the reading depends on the object, on the distance between sensor and object, and on the soil. Yilmaz et al.~\cite{yilmaz2018} built such a detector around a fluxgate sensor, recorded readings for four mine types and for empty ground at several heights in six soils, and released the data~\cite{uci_landmines}. They reported high detection and classification rates for a meta-heuristic $k$-NN, but on a single random split whose feature weights were optimised with a fitness computed on test observations.
+
+This paper revisits the task as a deep learning problem with three goals. First, an evaluation protocol whose numbers can be trusted: nested cross-validation~\cite{varma2006}, paired significance tests that account for overlapping training sets~\cite{nadeau2003,bouckaert2004}, and a leakage check. Second, a model that uses what is known about the physics: a dipole's field falls off with the cube of distance~\cite{jackson1999}. Third, behaviour that matters in the field: few missed mines, calibrated probabilities, an explicit ``inspect manually'' flag, robustness to sensor noise and a model small enough for a handheld or airborne device.
+
+Our contributions are: (i) a physics-informed FT-Transformer with inverse-cube features, a height-shift consistency loss and a safety loss; (ii) a rigorous comparison of six neural variants and four classical baselines with nested CV and corrected tests; (iii) uncertainty, calibration, robustness, leave-one-soil-out, ablation and SHAP analyses; and (iv) an ONNX/INT8 edge model and an interactive demonstrator. We report negative results as plainly as positive ones.
+
+\section{Related Work}
+\textbf{The dataset's original study.} Yilmaz et al.~\cite{yilmaz2018} compared artificial neural networks with classical and meta-heuristic $k$-NN and reported 98.2\,\% detection and 85.8\,\% classification accuracy for a $k$-NN with a fuzzy distance metric ($k=4$) whose feature weights were tuned by a meta-heuristic. Their evaluation used one random split with 113 test readings, and the meta-heuristic's fitness was computed on ``test observations'' \cite[p.~47877]{yilmaz2018}, which makes the reported figure optimistic.
+
+\textbf{Deep learning for tabular data.} The FT-Transformer of Gorishniy et al.~\cite{gorishniy2021} embeds each feature as a token and applies a Transformer~\cite{vaswani2017}; they found it a strong general-purpose tabular model, while gradient-boosted trees~\cite{chen2016} and kernel methods~\cite{cortes1995} remain hard baselines on small data.
+
+\textbf{Physics-informed learning.} Physics-informed neural networks add residuals of governing equations to the loss~\cite{raissi2019}; more broadly, physical knowledge can enter through features, architecture or loss~\cite{karniadakis2021}. Here the governing relation is the inverse-cube decay of a dipole field~\cite{jackson1999}.
+
+\textbf{Uncertainty and calibration.} MC dropout approximates Bayesian inference by sampling dropout masks at test time~\cite{gal2016}. Modern networks are often miscalibrated, and temperature scaling is a simple remedy~\cite{guo2017}; expected calibration error (ECE)~\cite{naeini2015} summarises calibration. Selective classification evaluates how well confidence ranks predictions when the least confident are rejected~\cite{geifman2017}.
+
+\section{Dataset}
+The data~\cite{uci_landmines} contain \vRows{} readings with four columns: the normalised sensor voltage $V$, the normalised sensor height $H$ (12 equally spaced levels between 0 and 1, corresponding to 0--20\,cm), the soil type $S$ (dry or humid; sandy, humus or limy), and the class $M$: no mine (\vCountNoMine{} readings), anti-tank (\vCountAntiTank), anti-personnel (\vCountAntiPersonnel), booby-trapped anti-personnel (\vCountBoobyTrappedAP) and M14 anti-personnel (\vCountMOneFourAP). The files do not document how $V$ and $H$ were normalised.
+
+\textbf{Audit.} There are no missing values and no duplicated rows or feature vectors. The Kaggle copy we used equals the ``Normalized\_Data'' sheet of the official UCI archive (maximum absolute difference \vKaggleUciDiff). The data follow a designed experiment: of the \vGridCells{} combinations of soil, height and class, \vGridObserved{} are observed exactly once and \vGridMissing{} are absent. Every reading is therefore unique, which rules out duplicate-based leakage but also means that every test reading is a combination not seen in training.
+
+\textbf{Height law.} In all \vSeriesNegativeRho{} (class, soil) series, $V$ decreases with height (Spearman $\rho<0$; $\rho<-0.8$ in \vSeriesRhoBelow). \vSaturatedRows{} anti-tank readings sit at the sensor's upper limit. On the unsaturated readings, a model $V=a+b/(H+d_0)^3$ with a shared offset $d_0$ and per-series $a,b$ explains $R^2=\vEdaRTwoCube$ of the variance, against \vEdaRTwoLinear{} for a straight line in $H$; the fitted offset is $d_0=\vEdaDZero$ in normalised height units, larger than the whole height range. The class alone explains $R^2=\vRTwoClass$ of the variance of $V$, class and height \vRTwoClassHeight, and class, height and soil \vRTwoAll. Fig.~\ref{fig:eda} shows the curves.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{fig05_voltage_vs_height_by_class.pdf}
+\caption{Voltage against sensor height for each class (one line per soil). Signals decay with height; anti-tank mines saturate the sensor close to the ground, and the three anti-personnel types overlap strongly.}
+\label{fig:eda}
+\end{figure}
+
+\section{Methodology}
+\subsection{Physics-informed inputs}
+All neural models receive the raw $(V,H)$ and the soil index; feature construction is part of the network, so the exported model needs no external preprocessing. The physics feature layer computes an effective distance $r=H+d_0$, where $d_0$ is fitted on the training rows of each split by minimising the residual of the inverse-cube model above (closed form for $a,b$; grid search for $d_0$; saturated readings excluded), and a soil background $b(S)$, the mean no-mine voltage of that soil in the training rows. It adds $\log V$, $Vr^3$, $V/r$, the distance-compensated anomaly $(V-b(S))\,r^3$ and a saturation flag. All features are standardised with training statistics.
+
+\subsection{Architectures}
+The \textbf{MLP} concatenates the features with a learned soil embedding and applies 1--3 blocks of linear layer, batch normalisation~\cite{ioffe2015}, ReLU and dropout~\cite{srivastava2014}. The \textbf{FT-Transformer}~\cite{gorishniy2021} maps every numeric feature $x_i$ to a token $x_i w_i + b_i$, adds a soil-embedding token and a [CLS] token, and applies 1--3 pre-norm Transformer blocks; the final [CLS] state is classified (Fig.~\ref{fig:arch}). ``+ physics features'' variants use the physics layer; ``PI'' (physics-informed) variants also use the consistency loss below.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{fig00_architecture.pdf}
+\caption{The physics-informed FT-Transformer (\pift) and its training objective.}
+\label{fig:arch}
+\end{figure*}
+
+\subsection{Training objective}
+The loss is
+\begin{equation}
+\mathcal{L} = \mathrm{CE} + \lambda_{s}\,\frac{1}{n}\!\sum_{i:\,y_i\neq 0}\!-\log\!\big(1-p_0(x_i)\big) + \lambda_{p}\,\mathrm{KL}\big(\bar p(x)\,\|\,p(x')\big),
+\end{equation}
+where $p_0$ is the predicted probability of ``no mine''. The second term is a cost-sensitive safety penalty that grows without bound as the model becomes confident that a real mine is empty ground; $\lambda_s=2$ was fixed before any experiment and never tuned on test data. The third term is a physics-consistency loss: each reading is moved to a new height $H'=H+\delta$, $\delta\sim U(-0.25,0.25)$, and its anomaly is rescaled by the inverse-cube law, $V'=b+(V-b)\,(r/r')^3$; the model must predict the same class distribution for $x'$ as for $x$ (with the target $\bar p(x)$ detached, and saturated readings excluded). Inputs are augmented with Gaussian noise whose scale, a multiple of each input's training standard deviation, is tuned. Models are trained with AdamW~\cite{loshchilov2019} and early stopping on validation cross-entropy.
+
+\subsection{Uncertainty}
+MC dropout~\cite{gal2016} averages 50 stochastic passes. A reading is flagged ``uncertain -- inspect manually'' if its predictive entropy exceeds the 80th percentile of the entropy on the split's validation rows; the threshold is fixed before the test fold is seen. Temperature scaling~\cite{guo2017} is fitted on the same validation rows.
+
+\section{Experimental Setup}
+\textbf{Protocol.} Outer loop: stratified 5-fold CV repeated with 5 seeds, giving 25 test folds of \vTestFoldMin--\vTestFoldMax{} readings; every model sees identical splits, so all comparisons are paired. A stratified 15\,\% of each outer training part is held out for early stopping (e.g.\ \vTrainFirst{} training and \vValFirst{} validation rows in the first split). Inner loop: Optuna~\cite{akiba2019} with the TPE sampler~\cite{bergstra2011} and median pruning maximises macro-F1 over 3 stratified folds of the outer training rows (40 trials for neural models, 60 for baselines). The outer test fold is used once, for scoring.
+
+\textbf{Baselines.} $k$-NN, an RBF SVM~\cite{cortes1995} with Platt scaling~\cite{platt1999}, random forest~\cite{breiman2001} and XGBoost~\cite{chen2016}, implemented with scikit-learn~\cite{pedregosa2011}, all with soil one-hot encoded and the same nested tuning. A first SVM search capped $C$ at $10^3$ and the tuned values reached that cap; we widened the range to $[10^{-2},10^5]$ (median tuned $C=\vSvmCMedian$) and report the wider search, which scored \vAccSvm{} against \vAccSvmNarrow{} for the narrower one.
+
+\textbf{Statistics.} Per-split scores of repeated CV are dependent, so in addition to the Wilcoxon signed-rank test~\cite{wilcoxon1945} we report the corrected repeated $k$-fold $t$-test~\cite{nadeau2003,bouckaert2004}, which inflates the variance by $n_\text{test}/n_\text{train}$, and the exact McNemar test~\cite{mcnemar1947} within each seed. Families of comparisons are Holm-corrected~\cite{holm1979}. We call a difference significant only if the corrected $t$-test gives $p<0.05$.
+
+\textbf{Leakage check.} Re-running SVM, PI-MLP and \pift{} with training labels shuffled gives \vPermMin--\vPermMax\,\% mean accuracy, the chance level for five classes.
+
+\textbf{Implementation.} PyTorch~\cite{paszke2019}, CPU training with fixed seeds. On the development laptop, CPU training was faster than Apple's MPS backend for these small models (FT-Transformer: \vDevFtCpu\,s vs.\ \vDevFtMps\,s per 100 epochs).
+
+\section{Results}
+\subsection{Accuracy and safety}
+Table~\ref{tab:main} and Fig.~\ref{fig:cv} summarise the nested CV. The SVM has the highest mean accuracy (\vAccSvm) and the lowest false-alarm rate; \pift{} is the best neural model (\vAccPiFt). Their difference (\vDiffPiFtVsSvmAccuracy{} points) is not significant (Table~\ref{tab:sig}); \pift{} is significantly more accurate than random forest, XGBoost and $k$-NN. All neural models miss fewer mines than every baseline (\vMissPiFt\,\% for \pift, \vMissSvm\,\% for the SVM) at the cost of more false alarms (\vFaPiFt\,\% vs.\ \vFaSvm\,\%), as intended by the safety loss; the mine-missed difference to the SVM is not significant under the corrected test ($p$~\vPtPiFtVsSvmMineMissed). The FT-Transformer is more accurate than the MLP by a margin that is suggestive but not significant ($p$~\vPtFtVsMlpAccuracy). Mine versus no-mine detection accuracy is about \vDetPiFt\,\% for \pift{} and \vDetSvm\,\% for the SVM. All models confuse the three anti-personnel types (Fig.~\ref{fig:cm}), whose signals overlap (Fig.~\ref{fig:eda}).
+
+\begin{table}[t]
+\centering
+\caption{Nested-CV results (mean over 25 test folds; accuracy $\pm$ std). Det.: mine vs.\ no-mine accuracy; Miss: share of real mines predicted as no mine; FA: share of empty readings predicted as a mine (all in \%).}
+\label{tab:main}
+\setlength{\tabcolsep}{2.5pt}
+\scriptsize
+\begin{tabular}{lccccc}
+\toprule
+Model & Accuracy & Macro F1 & Det. & Miss & FA \\
+\midrule
+\input{generated/table_main.tex}
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\caption{\pift{} minus each baseline, paired over 25 folds (difference in percentage points; W/T/L = folds where \pift{} is higher/tied/lower). Holm-corrected $p$-values.}
+\label{tab:sig}
+\setlength{\tabcolsep}{3pt}
+\footnotesize
+\begin{tabular}{llcccc}
+\toprule
+Baseline & Metric & Diff. & W/T/L & Wilcoxon & Corr.\ $t$ \\
+\midrule
+\input{generated/table_significance.tex}
+\end{tabular}
+\end{table}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{fig08_nested_cv_results.pdf}
+\caption{Per-fold accuracy and mine-missed rate for every model (dots: the 25 test folds; black: mean $\pm$ std). Neural models in blue.}
+\label{fig:cv}
+\end{figure*}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{fig10_confusion_matrices.pdf}
+\caption{Row-normalised confusion matrices pooled over all test folds (\%).}
+\label{fig:cm}
+\end{figure*}
+
+\subsection{Physics}\label{sec:physics}
+Physics features plus the consistency loss raised accuracy by \vPhysgainPiMlpVsMlp{} points for the MLP (better in \vPhysbetterPiMlpVsMlp{} of 25 folds, worse in \vPhysworsePiMlpVsMlp) and by \vPhysgainPiFtVsFt{} points for the FT-Transformer (\vPhysbetterPiFtVsFt{} better, \vPhysworsePiFtVsFt{} worse). Neither gain is significant ($p$~\vPtPiMlpVsMlpAccuracy{} and $p$~\vPtPiFtVsFtAccuracy). The fitted offset $d_0$ had a median of \vDZeroMedian{} (range \vDZeroMin--\vDZeroMax) across splits: the effective distance is dominated by the offset, so over the measured heights the inverse-cube curve is close to linear and the physics features carry little information that a network cannot learn from $H$ directly.
+
+\subsection{Uncertainty and calibration}
+Table~\ref{tab:unc} and Fig.~\ref{fig:rel} report calibration and the uncertainty flag. The raw \pift{} is reasonably calibrated (ECE \vEcePiFt, SVM \vEceSvm). Temperature scaling did not improve calibration for any neural model and made it slightly \emph{worse} for most (\pift: \vEcetsPiFt): its temperature is fitted on few validation rows (\vValFirst{} in the first split) that early stopping has already used. MC-dropout averaging improved ECE for the FT-Transformer models (\pift: \vEcemcPiFt). The 80th-percentile flag marks \vUncPiFtMcFlaggedShare\,\% of readings; accuracy is \vUncPiFtMcAccuracyConfident\,\% on the rest and \vUncPiFtMcAccuracyFlagged\,\% on flagged readings, and only \vUncPiFtMcMineMissedUnflagged\,\% of mines are missed without a flag. A single deterministic pass ranks readings as well as 50 MC-dropout passes (area under the risk--coverage curve \vUncPiFtSmAurc{} vs.\ \vUncPiFtMcAurc), so the deployed model uses the one-pass entropy.
+
+Ranking by confidence is where \pift{} clearly differs from the SVM (Fig.~\ref{fig:rc}): when only the 50\,\% most confident readings are decided automatically, \pift{} is correct on \vSelPiFtMcFifty\,\% and the SVM on \vSelSvmMpFifty\,\% (\vSelwinsSvmAccAtFiveZero{} wins, \vSellossesSvmAccAtFiveZero{} losses; Wilcoxon $p$~\vSelpwSvmAccAtFiveZero, corrected $p$~\vSelpSvmAccAtFiveZero). The conservative test does not reach significance, so this is strong but not conclusive evidence.
+
+\begin{table*}[t]
+\centering
+\caption{Calibration (ECE, lower is better) and the ``inspect manually'' flag. Flag columns: accuracy on unflagged and flagged readings with MC dropout, accuracy on unflagged readings with the one-pass entropy flag, and the share of mines missed without a flag (one-pass). All flags refer about 20\,\% of readings.}
+\label{tab:unc}
+\footnotesize
+\begin{tabular}{lccccccc}
+\toprule
+ & \multicolumn{3}{c}{ECE} & \multicolumn{2}{c}{MC-dropout flag (\%)} & \multicolumn{2}{c}{One-pass flag (\%)} \\
+Model & raw & temp.\ scaled & MC dropout & acc.\ unflagged & acc.\ flagged & acc.\ unflagged & mines missed, unflagged \\
+\midrule
+\input{generated/table_uncertainty.tex}
+\end{tabular}
+\end{table*}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{fig12_reliability_diagrams.pdf}
+\caption{Reliability diagrams pooled over all test folds; ECE is the mean over the five repetitions.}
+\label{fig:rel}
+\end{figure*}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.92\columnwidth]{fig13_risk_coverage.pdf}
+\caption{Accuracy on the most confident readings as a function of coverage. The dashed line marks the deployed flag threshold.}
+\label{fig:rc}
+\end{figure}
+
+\subsection{Robustness to sensor noise}
+Adding Gaussian noise to $V$ and $H$ at test time degrades every model (Fig.~\ref{fig:noise}). Accuracy falls at similar rates for \pift{} and the SVM, but the SVM increasingly calls mines empty ground: at a noise level of 0.5 training standard deviations, \pift{} misses \vNoisePiFtHalfMiss\,\% of mines and the SVM \vNoiseSvmHalfMiss\,\% (fewer misses in \vNoiselossesHalfMineMissed{} of 25 folds; corrected $p$~\vNoisepHalfMineMissed, Holm-corrected over the 8 noise levels $p$~\vNoiseHolmHalf). The difference remains significant after this correction for every noise level from \vNoiseHolmMinSigma{} upwards.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{fig14_noise_robustness.pdf}
+\caption{Accuracy and mine-missed rate under test-time Gaussian noise (mean over 25 folds, 5 noise draws each).}
+\label{fig:noise}
+\end{figure*}
+
+\subsection{Unseen soils}
+Leave-one-soil-out evaluation (train on five soils, test on the sixth; hyperparameters tuned by an inner leave-one-soil-out loop) shows that no model generalises to a new soil (Table~\ref{tab:loso}): accuracy drops from the levels of the main CV (column ``Seen'') to \vLosoMin--\vLosoMax\,\%. The best results come from an MLP that ignores soil (\vLosopctMlpNone\,\%) and from the SVM (\vLosopctSvm\,\%); factorising soil into moisture and texture embeddings did not help. Dry humus is the hardest held-out soil on average and for every model except the SVM (\vLosoDryHumusMin--\vLosoDryHumusMax\,\% across models).
+
+\begin{table}[t]
+\centering
+\caption{Leave-one-soil-out (mean over held-out soils, $\pm$ std over 5 refits). Miss in \%. ``Seen'': accuracy of the same model family in the main CV, where every soil is seen in training.}
+\label{tab:loso}
+\setlength{\tabcolsep}{2.5pt}
+\scriptsize
+\begin{tabular}{lccc}
+\toprule
+Model & Accuracy & Miss & Seen \\
+\midrule
+\input{generated/table_loso.tex}
+\end{tabular}
+\end{table}
+
+\subsection{Explanations}
+Exact Shapley values~\cite{lundberg2017} (three inputs, so all $2^3$ coalitions are evaluated) show that $V$ carries \vShapvPiFt\,\% of the total attribution for \pift, $H$ \vShaphPiFt\,\% and soil \vShapsPiFt\,\%; the SVM's attributions are similar (\vShapvSvm/\vShaphSvm/\vShapsSvm\,\%). Relative to $V$, soil carries much more weight for the three anti-personnel types than for anti-tank mines, whose strong signals need little context (Fig.~\ref{fig:shap}). Per-prediction explanations make individual failures visible; the missed mine shown in the figure is an anti-personnel reading whose low voltage pushes the model towards ``no mine''.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{fig15_shap_global.pdf}\\[2pt]
+\includegraphics[width=\textwidth]{fig18_shap_local.pdf}
+\caption{SHAP explanations. Top: mean $|\text{SHAP}|$ per input, stacked by class, and the effect of $V$ on $p(\text{no mine})$. Bottom: three individual \pift{} predictions (dashed: average prediction; solid: this reading).}
+\label{fig:shap}
+\end{figure*}
+
+\subsection{Edge deployment}
+The deployed \pift{} is the same tuning procedure applied to all readings (inner macro-F1 \vFinalInnerFOne; \vFinalBlocks{} blocks of width \vFinalDtoken; \vEdgeParams{} parameters). Exported to ONNX it matches PyTorch to \vParityFpThreeTwo; dynamic INT8 quantisation shrinks it to \vEdgeKbIntEight~KB and agrees with the full-precision model on \vParityIntEightAgree\,\% of 20{,}000 random readings (\vParityIntEightFlag\,\% for the flag). On one CPU thread of the development laptop a single reading takes about \vLatOnnxIntEight~\textmu s (Table~\ref{tab:edge}); quantisation saves memory but not time at this size. These timings are not from an embedded board; they suggest that real-time use on handheld or drone hardware is plausible, which remains to be measured.
+
+\begin{table}[t]
+\centering
+\caption{Size and speed of the deployed model (one CPU thread, development laptop).}
+\label{tab:edge}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{lccc}
+\toprule
+Runtime & Size (KB) & 1 reading (\textmu s) & Readings/s \\
+\midrule
+\input{generated/table_edge.tex}
+\end{tabular}
+\end{table}
+
+\subsection{Comparison with the original study}
+Table~\ref{tab:bench} places our results next to those of~\cite{yilmaz2018}. The protocols differ: a single split of 113 test readings, with test data used inside the meta-heuristic's fitness, against nested CV over 25 test folds. Our single-fold accuracies span a wide range (e.g.\ \vAccminPiFt--\vAccmaxPiFt\,\% for \pift), so a single small split can land far above or below the mean; we therefore do not claim to beat or fall short of the published figures.
+
+\begin{table}[t]
+\centering
+\caption{Comparison with Yilmaz et al.~\cite{yilmaz2018}. Brackets: range over single test folds.}
+\label{tab:bench}
+\setlength{\tabcolsep}{2.5pt}
+\scriptsize
+\begin{tabular}{lccc}
+\toprule
+Model & Protocol & 5-class acc. & Detection \\
+\midrule
+\input{generated/table_benchmark.tex}
+\end{tabular}
+\end{table}
+
+\section{Ablation Study}
+Each component was removed in turn from PI-MLP and \pift, reusing the hyperparameters tuned for each split in the main experiment and retraining with the same seeds (the full models reproduced the main results exactly). Removing an input means replacing it with its training mean. Table~\ref{tab:ablation} and Fig.~\ref{fig:ablation} report the change in accuracy.
+
+\begin{table}[t]
+\centering
+\caption{Ablation: change in accuracy (percentage points) and corrected $t$-test $p$-value, paired over 25 folds.}
+\label{tab:ablation}
+\setlength{\tabcolsep}{3pt}
+\scriptsize
+\begin{tabular}{lcccc}
+\toprule
+ & \multicolumn{2}{c}{PI-MLP} & \multicolumn{2}{c}{\pift} \\
+Removed & $\Delta$ & $p$ & $\Delta$ & $p$ \\
+\midrule
+\input{generated/table_ablation.tex}
+\end{tabular}
+\end{table}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.85\textwidth]{fig16_ablation.pdf}
+\caption{Ablation: change against the full model (mean over 25 folds $\pm$ standard error).}
+\label{fig:ablation}
+\end{figure*}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.8\columnwidth]{fig17_safety_tradeoff.pdf}
+\caption{Missed mines against false alarms as the safety-loss weight $\lambda_s$ varies.}
+\label{fig:safety}
+\end{figure}
+
+The inputs dominate: without $V$ accuracy collapses to about chance, and removing $H$ or soil changes the accuracy of \pift{} by \vAbPiFtNoh{} and \vAbPiFtNosoil{} points. Removing the physics features (\vAbPiFtNophysfeat), the physics loss (\vAbPiFtNophysloss) or both (\vAbPiFtNophys) lowers accuracy slightly but not significantly, consistent with Section~\ref{sec:physics}. Dropout, noise augmentation and the soil embedding (versus one-hot) make no measurable difference; the tuned noise scale sat near the lower edge of its search range. Removing batch normalisation \emph{improved} the PI-MLP by \vAbPiMlpNobn{} points (Wilcoxon $p$~\vAbpwPiMlpNobn, corrected $p$~\vAbpPiMlpNobn), even though the reused hyperparameters were tuned with batch normalisation; with only \vTrainFirst{} training rows per split and batches of 32, batch statistics are noisy.
+
+The safety weight trades missed mines against false alarms (Fig.~\ref{fig:safety}): for \pift, $\lambda_s=0$ gives \vSwPiFtZeroMiss\,\% missed mines and \vSwPiFtZeroFa\,\% false alarms, $\lambda_s=2$ gives \vSwPiFtTwoMiss\,\% and \vSwPiFtTwoFa\,\%, and $\lambda_s=8$ gives \vSwPiFtEightMiss\,\% and \vSwPiFtEightFa\,\%; accuracy changes little (\vSwPiFtZeroAcc{} to \vSwPiFtEightAcc). The weight is therefore an operating-point choice for the user, not a free improvement.
+
+\section{Discussion}
+\textbf{Deep learning versus a tuned SVM.} On \vRows{} readings of three inputs, a well-tuned kernel machine is as accurate as the best neural model. The neural model's advantages lie elsewhere: confidence that ranks readings better, more graceful degradation under noise with respect to missed mines, an objective that encodes the asymmetric cost of errors, and a single differentiable pipeline that includes the physics and exports to a \vEdgeKbIntEight-KB edge model.
+
+\textbf{Physics.} The inverse-cube model describes the data well ($R^2=\vEdaRTwoCube$), but the fitted offset is larger than the measured height range, so physics-based features add little beyond what the network learns from $H$. A sensor sweep over a wider range of heights, or data in physical units, would test the idea more sharply.
+
+\textbf{Limitations.} The dataset is small and comes from one experimental set-up; each (soil, height, class) combination is observed once, so test readings are always new combinations rather than repeated measurements. No model transfers to an unseen soil. The edge timings are from a laptop. The minefield demonstrator uses synthetic readings from the fitted inverse-cube model and is not an evaluation.
+
+\section{Conclusion}
+MineSense combines a physics-informed FT-Transformer, a safety-aware objective and an explicit uncertainty flag. Under nested cross-validation it is statistically tied with a tuned SVM in accuracy (\vAccPiFt{} vs.\ \vAccSvm), better than tree ensembles and $k$-NN, ranks its own confidence better, and misses fewer mines under sensor noise; its INT8 model is \vEdgeKbIntEight~KB. Physics-based features and loss help only slightly here, and transfer to new soils remains open. We hope the protocol, the negative results and the released pipeline make future comparisons on this dataset easier to trust.
+
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+
+\end{document}
