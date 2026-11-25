@@ -1,0 +1,42 @@
+{
+ "model": "PI-FT-Transformer (physics features + loss)",
+ "parameters": 68741,
+ "size_kb": {
+  "pytorch_state_dict": 278.9716796875,
+  "onnx_fp32": 283.36328125,
+  "onnx_int8": 100.9072265625
+ },
+ "parity_vs_pytorch": {
+  "fp32": {
+   "max_abs_prob_diff_real": 4.172325134277344e-07,
+   "max_abs_prob_diff_random": 1.3709068298339844e-06,
+   "argmax_agreement_real": 1.0,
+   "argmax_agreement_random": 1.0,
+   "flag_agreement_random": 1.0
+  },
+  "int8": {
+   "max_abs_prob_diff_real": 0.014015793800354004,
+   "max_abs_prob_diff_random": 0.05065584182739258,
+   "argmax_agreement_real": 1.0,
+   "argmax_agreement_random": 0.9985,
+   "flag_agreement_random": 0.99755
+  }
+ },
+ "timing_one_cpu_thread": {
+  "pytorch_eager": {
+   "batch1_ms": 0.13170787133276463,
+   "readings_per_s_batch4096": 70208.31620929291
+  },
+  "onnx_fp32": {
+   "batch1_ms": 0.07787486538290977,
+   "readings_per_s_batch4096": 68112.75070224077
+  },
+  "onnx_int8": {
+   "batch1_ms": 0.07624994032084942,
+   "readings_per_s_batch4096": 63214.00211996795
+  }
+ },
+ "machine": "arm64 macOS-26.3.1-arm64-arm-64bit",
+ "onnxruntime": "1.32.0",
+ "torch": "2.15.0"
+}
