@@ -1,0 +1,50 @@
+{
+ "Dry sandy": {
+  "params": {
+   "n_neighbors": 4,
+   "weights": "distance",
+   "p": 2
+  },
+  "inner_macro_f1": 0.40400405342530066
+ },
+ "Dry humus": {
+  "params": {
+   "n_neighbors": 3,
+   "weights": "uniform",
+   "p": 1
+  },
+  "inner_macro_f1": 0.4479028702173674
+ },
+ "Dry limy": {
+  "params": {
+   "n_neighbors": 11,
+   "weights": "uniform",
+   "p": 1
+  },
+  "inner_macro_f1": 0.3832084577985421
+ },
+ "Humid sandy": {
+  "params": {
+   "n_neighbors": 4,
+   "weights": "distance",
+   "p": 2
+  },
+  "inner_macro_f1": 0.38332766085235637
+ },
+ "Humid humus": {
+  "params": {
+   "n_neighbors": 7,
+   "weights": "uniform",
+   "p": 2
+  },
+  "inner_macro_f1": 0.420769554485647
+ },
+ "Humid limy": {
+  "params": {
+   "n_neighbors": 4,
+   "weights": "uniform",
+   "p": 2
+  },
+  "inner_macro_f1": 0.34614601886834073
+ }
+}

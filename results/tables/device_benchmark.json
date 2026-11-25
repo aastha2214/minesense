@@ -1,0 +1,35 @@
+{
+  "machine": "arm64",
+  "processor": "arm",
+  "torch": "2.15.0",
+  "cpu_threads": 1,
+  "train_epochs": 100,
+  "train_rows": 229,
+  "repeats": 3,
+  "results": {
+    "MLP / cpu": {
+      "train_seconds_per_100_epochs": 0.2762893750332296,
+      "inference_seconds_for_100000_rows": 0.018318291986361146
+    },
+    "MLP / mps": {
+      "train_seconds_per_100_epochs": 1.174424499971792,
+      "inference_seconds_for_100000_rows": 0.01038287510164082
+    },
+    "PI-MLP / cpu": {
+      "train_seconds_per_100_epochs": 0.36733087501488626,
+      "inference_seconds_for_100000_rows": 0.01923174993135035
+    },
+    "PI-MLP / mps": {
+      "train_seconds_per_100_epochs": 1.5100910000037402,
+      "inference_seconds_for_100000_rows": 0.006863374961540103
+    },
+    "FT-Transformer / cpu": {
+      "train_seconds_per_100_epochs": 1.062299916986376,
+      "inference_seconds_for_100000_rows": 0.32132604205980897
+    },
+    "FT-Transformer / mps": {
+      "train_seconds_per_100_epochs": 2.5543466249946505,
+      "inference_seconds_for_100000_rows": 0.08406758308410645
+    }
+  }
+}

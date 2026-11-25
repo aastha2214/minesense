@@ -1,0 +1,11 @@
+,Dry sandy,Dry humus,Dry limy,Humid sandy,Humid humus,Humid limy
+"FT-Transformer, factorised soil embedding",0.3424,0.2784,0.2821,0.4351,0.4207,0.4456
+k-NN,0.4746,0.2353,0.5179,0.4386,0.3448,0.5439
+"MLP, soil embedding (mean vector for unseen soil)",0.3831,0.2353,0.4607,0.4491,0.4690,0.5123
+"MLP, factorised soil embedding",0.4068,0.2353,0.3214,0.4351,0.4897,0.3158
+"MLP, no soil input",0.3763,0.2706,0.5786,0.3509,0.5310,0.4632
+"PI-FT-Transformer, factorised soil embedding",0.3559,0.2275,0.3964,0.4140,0.4828,0.5018
+"PI-MLP, factorised soil embedding",0.3254,0.2000,0.3321,0.3860,0.4103,0.4351
+Random forest,0.3966,0.2471,0.3821,0.4211,0.4241,0.5193
+SVM (RBF),0.5763,0.2392,0.2357,0.4982,0.4310,0.4561
+XGBoost,0.4508,0.2235,0.3214,0.4456,0.4414,0.4982

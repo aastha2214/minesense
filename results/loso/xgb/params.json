@@ -1,0 +1,74 @@
+{
+ "Dry sandy": {
+  "params": {
+   "n_estimators": 438,
+   "max_depth": 3,
+   "learning_rate": 0.03128910893540926,
+   "subsample": 0.9161077412724267,
+   "colsample_bytree": 0.5898585428123702,
+   "min_child_weight": 0.9723052935360734,
+   "reg_lambda": 1.4714262866638284
+  },
+  "inner_macro_f1": 0.45047638877067664
+ },
+ "Dry humus": {
+  "params": {
+   "n_estimators": 321,
+   "max_depth": 8,
+   "learning_rate": 0.021647891458527784,
+   "subsample": 0.6911389912251638,
+   "colsample_bytree": 0.9053866095788419,
+   "min_child_weight": 0.7006437130749937,
+   "reg_lambda": 0.5701528447275492
+  },
+  "inner_macro_f1": 0.46431333455914103
+ },
+ "Dry limy": {
+  "params": {
+   "n_estimators": 540,
+   "max_depth": 8,
+   "learning_rate": 0.2614900138068188,
+   "subsample": 0.9133865099434878,
+   "colsample_bytree": 0.5890038561385522,
+   "min_child_weight": 2.5403164068389703,
+   "reg_lambda": 0.47473583244622863
+  },
+  "inner_macro_f1": 0.43799034698746897
+ },
+ "Humid sandy": {
+  "params": {
+   "n_estimators": 70,
+   "max_depth": 4,
+   "learning_rate": 0.21120695178878138,
+   "subsample": 0.7135282435847159,
+   "colsample_bytree": 0.6079302971860943,
+   "min_child_weight": 0.5445758939971886,
+   "reg_lambda": 0.001384987735846759
+  },
+  "inner_macro_f1": 0.3745053360902725
+ },
+ "Humid humus": {
+  "params": {
+   "n_estimators": 255,
+   "max_depth": 8,
+   "learning_rate": 0.059038456402357074,
+   "subsample": 0.9759853836371164,
+   "colsample_bytree": 0.5030330770084206,
+   "min_child_weight": 1.3154060919975852,
+   "reg_lambda": 7.070146569702616
+  },
+  "inner_macro_f1": 0.40203289364141137
+ },
+ "Humid limy": {
+  "params": {
+   "n_estimators": 51,
+   "max_depth": 5,
+   "learning_rate": 0.20193579178561272,
+   "subsample": 0.8308230400889673,
+   "colsample_bytree": 0.6244388594082977,
+   "min_child_weight": 1.391043697515434,
+   "reg_lambda": 0.0019089438095183683
+  },
+  "inner_macro_f1": 0.3897104839544301
+ }
+}

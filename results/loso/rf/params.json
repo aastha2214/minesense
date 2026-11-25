@@ -1,0 +1,50 @@
+{
+ "Dry sandy": {
+  "params": {
+   "max_depth": 7,
+   "min_samples_leaf": 5,
+   "max_features": 1.0
+  },
+  "inner_macro_f1": 0.43385433469101875
+ },
+ "Dry humus": {
+  "params": {
+   "max_depth": 16,
+   "min_samples_leaf": 1,
+   "max_features": 1.0
+  },
+  "inner_macro_f1": 0.44452802936383495
+ },
+ "Dry limy": {
+  "params": {
+   "max_depth": 12,
+   "min_samples_leaf": 1,
+   "max_features": 0.6
+  },
+  "inner_macro_f1": 0.4218183747413253
+ },
+ "Humid sandy": {
+  "params": {
+   "max_depth": 14,
+   "min_samples_leaf": 1,
+   "max_features": 0.6
+  },
+  "inner_macro_f1": 0.3758642949174967
+ },
+ "Humid humus": {
+  "params": {
+   "max_depth": 16,
+   "min_samples_leaf": 1,
+   "max_features": 0.6
+  },
+  "inner_macro_f1": 0.4021095102454034
+ },
+ "Humid limy": {
+  "params": {
+   "max_depth": 19,
+   "min_samples_leaf": 1,
+   "max_features": 0.6
+  },
+  "inner_macro_f1": 0.35636545627557814
+ }
+}

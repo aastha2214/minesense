@@ -1,0 +1,7 @@
+comparison,mean_accuracy_gain,std,mean_macro_f1_gain,splits_better,splits_equal,splits_worse
+MLP + physics features vs MLP,0.0189,0.0420,0.0173,15,3,7
+PI-MLP (physics features + loss) vs MLP,0.0283,0.0563,0.0257,16,3,6
+PI-MLP (physics features + loss) vs MLP + physics features,0.0094,0.0545,0.0083,12,3,10
+FT-Transformer + physics features vs FT-Transformer,-0.0012,0.0610,0.0025,10,3,12
+PI-FT-Transformer (physics features + loss) vs FT-Transformer,0.0106,0.0438,0.0108,16,2,7
+PI-FT-Transformer (physics features + loss) vs FT-Transformer + physics features,0.0118,0.0527,0.0083,14,3,8

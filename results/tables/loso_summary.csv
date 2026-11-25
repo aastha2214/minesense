@@ -1,0 +1,11 @@
+model,model,accuracy,macro_f1,mine_missed,false_alarm,main_cv_family,main_cv_accuracy_soil_seen
+mlp_none,"MLP, no soil input",0.428 ± 0.014,0.399 ± 0.012,0.052 ± 0.016,0.535 ± 0.048,MLP,0.6465
+knn,k-NN,0.426 ± 0.000,0.374 ± 0.000,0.254 ± 0.000,0.295 ± 0.000,k-NN,0.4361
+mlp_embed,"MLP, soil embedding (mean vector for unseen soil)",0.418 ± 0.027,0.383 ± 0.020,0.103 ± 0.010,0.515 ± 0.085,MLP,0.6465
+svm,SVM (RBF),0.406 ± 0.010,0.363 ± 0.006,0.206 ± 0.004,0.460 ± 0.048,SVM (RBF),0.7172
+rf,Random forest,0.398 ± 0.003,0.367 ± 0.002,0.208 ± 0.003,0.405 ± 0.015,Random forest,0.5880
+xgb,XGBoost,0.397 ± 0.012,0.364 ± 0.016,0.211 ± 0.005,0.440 ± 0.016,XGBoost,0.5357
+pi_ft_factor,"PI-FT-Transformer, factorised soil embedding",0.396 ± 0.027,0.361 ± 0.024,0.155 ± 0.032,0.566 ± 0.134,PI-FT-Transformer (physics features + loss),0.7006
+ft_factor,"FT-Transformer, factorised soil embedding",0.367 ± 0.037,0.342 ± 0.038,0.171 ± 0.020,0.651 ± 0.049,FT-Transformer,0.6892
+mlp_factor,"MLP, factorised soil embedding",0.367 ± 0.029,0.332 ± 0.037,0.133 ± 0.050,0.674 ± 0.060,MLP,0.6465
+pi_mlp_factor,"PI-MLP, factorised soil embedding",0.348 ± 0.043,0.324 ± 0.031,0.157 ± 0.031,0.723 ± 0.070,PI-MLP (physics features + loss),0.6739
