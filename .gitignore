@@ -1,0 +1,37 @@
+# Environments
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Data files (regenerate with `python -m minesense.download`)
+data/*
+!data/README.md
+
+# Per-split fitted models and run logs (regenerate with `python -m minesense.cv`)
+results/models/
+results/logs/
+
+# Credentials and secrets
+.kaggle/
+kaggle.json
+access_token
+*.token
+*.pem
+*.key
+.env
+.env.*
+.streamlit/secrets.toml
+
+# OS / editor / LaTeX build products
+.DS_Store
+.vscode/
+.idea/
+*.aux
+*.log
+*.out
+*.bbl
+*.blg
+*.synctex.gz

@@ -1,0 +1,34 @@
+# Python 3.12. Install with:
+#   pip install -r requirements.txt && pip install -e .
+
+# Deep learning
+torch==2.15.0
+
+# Data and classical baselines
+numpy==2.5.5
+pandas==3.1.1
+scipy==1.18.1
+scikit-learn==1.9.1
+xgboost==3.4.1          # on macOS needs the OpenMP runtime: brew install libomp
+
+# Tuning and explainability
+optuna==5.1.0
+shap==0.54.1
+
+# Plots
+matplotlib==3.11.2
+seaborn==0.13.2
+
+# Demo and deployment
+streamlit==1.67.0
+onnx==1.23.2
+onnxruntime==1.32.0
+onnxscript==0.7.2
+
+# Data download (kaggle 2.2.5 imports `six` without declaring it)
+kaggle==2.2.5
+six==1.17.0
+python-calamine==0.9.1   # reads the original UCI .xls for verification
+
+# Tests
+pytest==9.2.0
