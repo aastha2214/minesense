@@ -4,7 +4,7 @@
 
 **Physics-informed deep learning for passive landmine detection and classification, with an "uncertain - inspect manually" flag.**
 
-**Live demo:** _coming soon_ <!-- LIVE_DEMO_URL: replace with the Streamlit Community Cloud link -->
+**Live demo:** [minesense.streamlit.app](https://minesense.streamlit.app) [![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://minesense.streamlit.app)
 
 MineSense classifies a magnetic-anomaly reading from a passive (fluxgate) detector into *no mine* or one of four mine types, using the reading's voltage **V**, the sensor height **H** and the soil type **S**. It is a deep learning course project on the UCI *Land Mines* dataset ({{rows}} readings). The repository holds the full pipeline: nested cross-validation, a physics-informed FT-Transformer, uncertainty and calibration analysis, an ablation study, an ONNX edge model and a Streamlit app with a minefield simulation.
 
@@ -126,4 +126,6 @@ The code is released under the [MIT licence](LICENSE). The dataset is not part o
 
 ## Authors
 
-_To be added._
+Aastha Kumari, Monika, Anubhav Kumar and Kartikay Kaushal
+
+Department of Computer Science and Engineering, Thapar Institute of Engineering and Technology, Patiala, India

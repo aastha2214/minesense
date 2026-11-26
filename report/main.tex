@@ -11,13 +11,37 @@
 \graphicspath{{../results/figures/}}
 \input{generated/numbers.tex}
 \newcommand{\pift}{PI-FT-Transformer}
+\makeatletter
+\newcommand{\linebreakand}{%
+  \end{@IEEEauthorhalign}
+  \hfill\mbox{}\par
+  \mbox{}\hfill\begin{@IEEEauthorhalign}
+}
+\makeatother
 
 \begin{document}
 
 \title{MineSense: Physics-Informed Deep Learning for Passive Landmine Detection and Classification with Calibrated Uncertainty}
 
-\author{\IEEEauthorblockN{[Author names to be added]}
-\IEEEauthorblockA{[Affiliation and contact details to be added]}}
+\author{\IEEEauthorblockN{Aastha Kumari}
+\IEEEauthorblockA{\textit{Department of Computer Science and Engineering} \\
+\textit{Thapar Institute of Engineering and Technology}\\
+Patiala, India}
+\and
+\IEEEauthorblockN{Monika}
+\IEEEauthorblockA{\textit{Department of Computer Science and Engineering} \\
+\textit{Thapar Institute of Engineering and Technology}\\
+Patiala, India}
+\linebreakand
+\IEEEauthorblockN{Anubhav Kumar}
+\IEEEauthorblockA{\textit{Department of Computer Science and Engineering} \\
+\textit{Thapar Institute of Engineering and Technology}\\
+Patiala, India}
+\and
+\IEEEauthorblockN{Kartikay Kaushal}
+\IEEEauthorblockA{\textit{Department of Computer Science and Engineering} \\
+\textit{Thapar Institute of Engineering and Technology}\\
+Patiala, India}}
 
 \maketitle
 
